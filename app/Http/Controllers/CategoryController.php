@@ -22,17 +22,20 @@ class CategoryController extends Controller
         $filter     = new GeneralService();
         $queryItems = $filter->transform($request);
 
-        $customers = Category::where($queryItems);
+        $category = Category::where($queryItems);
 
         if($request->query('subs')) {
-            $customers->with('subs');
+            $category->with('subs');
         }
 
 
         return CategoryResource::collection(
-            $customers->paginate()->appends($request->query()))
+            $category->paginate()->appends($request->query()))
         ;
-    }
+    }//
+        // if($request->query('subs')) {
+        //     $category = $category->with('subs')->get();
+        // }
 
     /**
      * Show the form for creating a new resource.
@@ -47,15 +50,34 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        return new CustomerResource(Category::create($request->all()));
+        $image = $request->file('image')->store('images/categories');
+
+        return new CategoryResource(Category::create([
+            ...$request->all(),
+            "image" => $image
+        ]));
+        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Category $category, Request $request)
     {
         //
+        if($request->query('subs')) {
+            $subsPerPage = $request->query('subsPerPage', 15);
+            
+            $category = $category->load([
+                'subs' => function ($query) use ($subsPerPage) {
+                    $query->paginate($subsPerPage);
+                }
+            ]);
+        }
+
+        // return $category;
+        
+
         return new CategoryResource($category);
     }
 

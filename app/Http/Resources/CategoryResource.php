@@ -16,8 +16,9 @@ class CategoryResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
+            'id'       => $this->id,
             'category' => $this->name,
-            'image'    => $this->image,
+            'image'    => env('APP_URL') . '/' . $this->image,
             'subs'     => CategoryResource::collection($this->whenLoaded('subs'))
             
         ];
