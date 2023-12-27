@@ -19,7 +19,8 @@ class CategoryResource extends JsonResource
             'id'       => $this->id,
             'category' => $this->name,
             'image'    => env('APP_URL') . '/' . $this->image,
-            'subs'     => CategoryResource::collection($this->whenLoaded('subs'))
+            'subs'     => CategoryResource::collection($this->whenLoaded('subs')),
+            'parent'   => $this->parent_id,
             
         ];
     }

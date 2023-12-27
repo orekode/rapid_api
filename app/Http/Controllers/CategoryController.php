@@ -52,9 +52,22 @@ class CategoryController extends Controller
     {
         $image = $request->file('image')->store('images/categories');
 
+        $ancestors = "";
+
+        if(isset($request->parent_id)) {
+
+            $parent = Category::find($request->parent_id);
+
+            if($parent) {
+                $ancestors .= " {$parent->name} {$parent->ancestors} ";
+            }
+            
+        }
+
         return new CategoryResource(Category::create([
             ...$request->all(),
-            "image" => $image
+            "ancestors" => $ancestors,
+            "image"     => $image
         ]));
         
     }
@@ -79,6 +92,22 @@ class CategoryController extends Controller
         
 
         return new CategoryResource($category);
+    }
+
+    public function showSubCategories(Request $request) 
+    {
+        $filter     = new GeneralService();
+        $queryItems = $filter->transform($request);
+
+        $data = $request->validate([
+            'identifier' => 'required'
+        ]);
+
+        $parent = Category::where('id', $data['identifier'])->orWhere('name', $data['identifier'])->first();
+
+        return CategoryResource::collection(
+            Category::where($queryItems)->where('ancestors', 'like', "%{$parent->name}%")->paginate()
+        );
     }
 
     /**
