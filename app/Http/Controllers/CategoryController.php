@@ -59,7 +59,7 @@ class CategoryController extends Controller
             $parent = Category::find($request->parent_id);
 
             if($parent) {
-                $ancestors .= " {$parent->name} {$parent->ancestors} ";
+                $ancestors .= " {{$parent->id}} {{$parent->ancestors}} ";
             }
             
         }
@@ -123,7 +123,25 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $image = $category->image;
+        
+
+        if(isset($request->image)) {
+            $image = $request->file('image')->store('images/categories');
+        }
+
+        if(isset($request->parent_id)) {
+            Category::where('ancestor', 'like', "%{$category->id}%")->update([
+                'ancestor'
+            ]);
+        }
+
+        $category->update([
+            'name' => $request->name,
+            'image' => $image,
+        ]);
+
+        return $category;
     }
 
     /**
