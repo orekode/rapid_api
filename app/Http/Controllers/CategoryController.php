@@ -130,10 +130,29 @@ class CategoryController extends Controller
             $image = $request->file('image')->store('images/categories');
         }
 
-        if(isset($request->parent_id)) {
-            Category::where('ancestor', 'like', "%{$category->id}%")->update([
-                'ancestor'
-            ]);
+        if(isset($request->parent_id) && !strpos($category->ancestors, $request->parent_id)) {
+
+            $new_parent = Category::find($request->parent_id);
+            $new_ancestors = " {{$new_parent->id}} {{$new_parent->ancestors}} ";
+
+            if($new_parent) {
+                
+                $children = Category::where('ancestors', 'like', "%{{$category->id}}%")->all();
+    
+                foreach($children as $child) {
+                    $child->update([
+                        "ancestors" => str_replace(
+                            "{{$category->ancestors}}", 
+                            "{{$new_ancestors}}"
+                        )
+                    ]);
+                }
+
+                $category->update([
+                    "ancestors" => $new_ancestors
+                ]);
+            }
+
         }
 
         $category->update([
