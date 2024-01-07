@@ -30,6 +30,27 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         //
+        $image = $request->file('image')->store('images/products');
+
+        if($image) 
+            $product = Product::create([
+                ...$request->all(),
+                "image" => $image,
+            ]);
+        else {
+            return response()->json([
+                'errors' => [
+                    'image' => "unable to upload image",
+                ]
+            ], 422);
+        }
+
+
+        
+
+
+
+        return $product;
     }
 
     /**

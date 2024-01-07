@@ -11,7 +11,7 @@ class StoreProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,30 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "image"                 => ['required', 'image'],
+            "images"                => ['array',  'required', 'min:3'],
+            "images.*"              => ['image'],
+            "short_description"     => ['required'],
+            "name"                  => ['required'],
+            "price"                 => ['required', 'numeric'],        
+            "quantity"              => ['required', 'integer'],        
+            "discount_type"         => [''],
+            "discount_value"        => ['numeric'],
+            "categories"            => ['array', 'required'],
+            "categories.*"          => ['required', 'exists:categories,id'],
+            "properties"            => ['array'],
+            "properties.*.title"    => [''],
+            "properties.*.value"    => ['']
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            "image.required" => "Please upload a product image",
+            "images.min"     => "Please upload at least :min other images to create this product",
+            "images.*.image" => "File uploaded must be an image",
+            "image.image"    => "File uploaded must be an image",
         ];
     }
 }

@@ -16,8 +16,12 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('image');
+            $table->float('price');
+            $table->string('discount_type');
+            $table->float('discount_value');
             $table->integer('quantity');
-            $table->longText('description');
+            $table->longText('short_description');
+            $table->longText('long_description');
             $table->timestamps();
             
         });
