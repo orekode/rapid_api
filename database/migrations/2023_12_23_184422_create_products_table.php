@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('image');
             $table->float('price');
-            $table->string('discount_type');
-            $table->float('discount_value');
+            $table->string('discount_type')->default('percentage');
+            $table->float('discount_value')->default(0.00);
             $table->integer('quantity');
             $table->longText('short_description');
-            $table->longText('long_description');
+            $table->longText('long_description')->default("");
             $table->timestamps();
             
         });
