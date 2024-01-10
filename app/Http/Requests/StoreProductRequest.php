@@ -26,7 +26,7 @@ class StoreProductRequest extends FormRequest
             "images"                => ['array',  'required', 'min:3'],
             "images.*"              => ['image'],
             "short_description"     => ['required'],
-            "name"                  => ['required'],
+            "name"                  => ['required', 'unique:products,name'],
             "price"                 => ['required', 'numeric'],        
             "quantity"              => ['required', 'integer'],        
             "discount_type"         => [''],

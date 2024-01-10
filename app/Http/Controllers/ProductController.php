@@ -91,8 +91,8 @@ class ProductController extends Controller
             ], 422);
         }
         
-        $this->updateCategories($product, $request->categories);
-        $this->updateProperties($product, $request->properties);
+        $this->updateCategories($product, $request->categories ?? []);
+        $this->updateProperties($product, $request->properties ?? []);
 
         if(isset($request->previous_images)) {
             $this->removeImages($product, $request->previous_images);

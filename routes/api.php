@@ -25,8 +25,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::apiResources([
-    'categories' => CategoryController::class,
-    'products' => ProductController::class,
+    'categories'    => CategoryController::class,
+    'products'      => ProductController::class,
+    'tags'          => TagController::class,
 ]);
 
 Route::get('/sub_categories', [CategoryController::class, 'showSubCategories']);

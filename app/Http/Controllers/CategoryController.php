@@ -30,12 +30,9 @@ class CategoryController extends Controller
 
 
         return CategoryResource::collection(
-            $category->paginate()->appends($request->query()))
-        ;
-    }//
-        // if($request->query('subs')) {
-        //     $category = $category->with('subs')->get();
-        // }
+            $category->paginate()->appends($request->query())
+        );
+    }
 
     /**
      * Show the form for creating a new resource.
