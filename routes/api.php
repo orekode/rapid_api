@@ -28,6 +28,7 @@ Route::apiResources([
     'categories'    => CategoryController::class,
     'products'      => ProductController::class,
     'tags'          => TagController::class,
+    'carts'         => CartController::class,
 ]);
 
 Route::get('/sub_categories', [CategoryController::class, 'showSubCategories']);
